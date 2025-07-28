@@ -1,0 +1,34 @@
+name: action-executor
+
+replicaCount: 1
+
+image:
+  tag: latest
+  repository: 339713081046.dkr.ecr.us-east-1.amazonaws.com/action
+  imagePullPolicy: Always
+
+readinessProbe:
+  enabled: false
+
+livenessProbe:
+  enabled: false
+
+
+service:
+  enabled: true
+  annotations: {}
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+  name: default-service
+  # allocateLoadBalancerNodePorts: false
+  # externalTrafficPolicy: Local
+  additionalPorts: []
+
+rbac:
+  create: true
+  rules:
+    - apiGroups: ["*"]
+      resources: ["*"]
+      verbs: ["*"]
+  clusterWideAccess: true
