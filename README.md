@@ -11,7 +11,7 @@ This microservice is responsible for executing actions as part of the SRE agent 
 - **Health Check Endpoint**
 
 ---
-
+  
 ## Requirements
 - Python 3.9+
 - Access to a Kubernetes cluster (via kubeconfig or in-cluster service account)
