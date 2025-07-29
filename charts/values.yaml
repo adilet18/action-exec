@@ -11,8 +11,19 @@ readinessProbe:
   enabled: false
 
 livenessProbe:
-  enabled: false
+  enabled: true
+  # For the liveness probe we'll wait a full 2 minutes, just incase this service takes a while to start-up
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 9
+  successThreshold: 1
+  failureThreshold: 3
 
+  probeType: httpGet
+
+  scheme: HTTP
+  path: /healthz
+  port: default-service
 
 service:
   enabled: true

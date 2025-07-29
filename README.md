@@ -137,3 +137,52 @@ This service is designed to be deployed as a pod in your Kubernetes cluster. Hel
 See [charts/README.md](charts/README.md) for detailed instructions and useful Helm commands to deploy or upgrade the Action Executor Service in your cluster.
 
 --- 
+
+## Swagger UI Usage
+
+This service exposes a Swagger UI for interacting with its API endpoints, including the ability to run arbitrary Kubernetes commands (if enabled and approved).
+
+![Diagram showing API flow](../images/image.png)
+
+
+## API Endpoints
+
+> GET `/healthz`
+> Checks if the service is alive and responsive. Useful for liveness/readiness probes.
+
+> ⚠️ **Use with Caution**  
+> POST `/exec` endpoint allows shell command execution and should be tightly controlled  
+> (e.g., internal use only, behind authentication/proxy layers).
+
+> GET `/`
+> Returns a welcome message (useful for testing connectivity).
+
+
+---
+
+### Executing a Kubernetes Command
+
+1. Open the Swagger UI in your browser:
+
+> http://localhost:8000/docs
+
+2. Scroll down to:
+POST /exec
+
+
+3. Set the `approve` parameter to `true`.
+
+> ℹ️ **About `approve`:**  
+> This flag is required to execute potentially dangerous or state-changing commands (e.g., deleting pods, scaling deployments, modifying resources).  
+> If the `approve` parameter is not set to `true`, the request will be blocked to prevent accidental or malicious execution.  
+>  
+> This serves as a safeguard to avoid unintended disruptions in production environments. Use this with extreme caution and only when you are confident in the command being run.
+
+4. In the **Request Body**, provide a valid Kubernetes command. Example:
+```json
+{
+  "command": "kubectl delete po nginx-ingress-nginx-controller-b95ccb4b5-5g7hp -n nginx-ingress"
+}
+```
+
+5. Click "Execute".
